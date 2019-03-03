@@ -1,0 +1,50 @@
+---
+title: "Homework3_StephenJones"
+author: "Stephen Jones"
+date: "March 2, 2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE,warning=FALSE,message=FALSE}
+rm(list=ls())
+library(DATA606)
+knitr::opts_chunk$set(echo = TRUE)
+```
+3.2 Area under the curve, Part II.
+What percent of a standard normal distribution $N(\mu=0,\sigma=1)$ is found in each region? Be sure to draw a graph.
+```{r normalPlot warning=FALSE,message=FALSE}
+
+normalPlot(0,1,bounds=c(-1.13,4),tails=FALSE)
+round((1-pnorm(-1.13, mean = 0, sd = 1))*100,1)
+
+normalPlot(0,1,bounds=c(-4,0.18),tails=FALSE)
+round((pnorm(0.18, mean = 0, sd = 1))*100,1)
+
+sim<-rnorm(1000,0,1)
+
+#hist(sim, probability = TRUE,ylim = c(0, 1),breaks = 50)
+#x <- -4:4
+#y <- dnorm(x = x, mean = 0, sd = 1)
+#lines(x = x, y = y, col = "blue")
+
+x <- seq(-4, 4, length=100)
+hx <- dnorm(x)
+plot(x, hx, type="l", lty=2, xlab="x value",
+  ylab="", main="Probability Distributions",axes=FALSE)
+
+mean=0; sd=1
+lb=-1.13; ub=5
+
+i <- x >= lb & x <= ub
+lines(x, hx)
+polygon(c(lb,x[i],ub), c(0,hx[i],0), col="red") 
+
+area <- pnorm(ub, mean, sd) - pnorm(lb, mean, sd)
+result <- paste("P(",lb,"< IQ <",ub,") =",
+   signif(area, digits=2))
+mtext(result,3)
+axis(1, at=seq(-4, 4, 2), pos=0)
+
+```
